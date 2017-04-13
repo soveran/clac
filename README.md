@@ -2,10 +2,9 @@
 
 A command line, stack-based calculator with postfix notation that
 displays the stack contents at all times. As you type, the stack
-changes are reflected immediately. If you want to see it in action,
-check the [screencast][screencast].
+changes are reflected immediately.
 
-[screencast]: http://files.soveran.com/misc/clac.mov
+![clac in action](http://files.soveran.com/misc/clac.gif)
 
 In a stack-based postfix calculator, entering a number pushes it
 on a stack, and arithmetic operations pop their arguments from the
