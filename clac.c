@@ -60,15 +60,14 @@ static double pop() {
 static void eval(const char *input) {
 	int i, argc;
 	double a, b;
+	char *z;
 
 	sds *argv = sdssplitargs(input, &argc);
 
 	top = 0;
 
 	for (i = 0; i < argc; i++) {
-		if (isdigit(argv[i][0])) {
-			push(strtod(argv[i], NULL));
-		} else if (!strcmp(argv[i], "+")) {
+		if (!strcmp(argv[i], "+")) {
 			a = pop();
 			b = pop();
 			push(a + b);
@@ -95,6 +94,12 @@ static void eval(const char *input) {
 			a = pop();
 			push(a);
 			push(a);
+		} else {
+			a = strtod(argv[i], &z);
+
+			if (*z == '\0') {
+				push(a);
+			}
 		}
 	}
 
