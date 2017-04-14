@@ -45,7 +45,7 @@ static int top = 0;
 
 static sds result;
 
-void push(double value) {
+static void push(double value) {
 	stack[top++] = value;
 }
 
