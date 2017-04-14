@@ -38,18 +38,18 @@
 #define HINT_COLOR 33
 #define OUTPUT_FMT "\x1b[33m= %g\x1b[0m\n"
 
-double stack[0xFF];
-double hole = 0;
+static double stack[0xFF];
+static double hole = 0;
 
-int top = 0;
+static int top = 0;
 
-sds result;
+static sds result;
 
 void push(double value) {
 	stack[top++] = value;
 }
 
-double pop() {
+static double pop() {
 	if (top == 0) {
 		return 0;
 	}
@@ -57,7 +57,7 @@ double pop() {
 	return stack[--top];
 }
 
-void eval(const char *input) {
+static void eval(const char *input) {
 	int i, argc;
 	double a, b;
 
@@ -106,7 +106,7 @@ void eval(const char *input) {
 	}
 }
 
-char *hints(const char *input, int *color, int *bold) {
+static char *hints(const char *input, int *color, int *bold) {
 	*color = HINT_COLOR;
 	eval(input);
 	return result;
