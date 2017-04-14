@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "linenoise.h"
 #include "sds.h"
 
@@ -83,8 +84,25 @@ static void eval(const char *input) {
 			a = pop();
 			b = pop();
 			push(b / a);
+		} else if (!strcmp(argv[i], "%")) {
+			a = pop();
+			b = pop();
+			push(b - a * floor(b / a));
+		} else if (!strcmp(argv[i], "^")) {
+			a = pop();
+			b = pop();
+			push(pow(b, a));
 		} else if (!strcmp(argv[i], "_")) {
 			push(hole);
+		} else if (!strcasecmp(argv[i], "ceil")) {
+			a = pop();
+			push(ceil(a));
+		} else if (!strcasecmp(argv[i], "floor")) {
+			a = pop();
+			push(floor(a));
+		} else if (!strcasecmp(argv[i], "round")) {
+			a = pop();
+			push(round(a));
 		} else if (!strcasecmp(argv[i], "swap")) {
 			a = pop();
 			b = pop();

@@ -67,6 +67,30 @@ Pop two values `a` and `b` and push the result of `a * b`.
 `/` 
 Pop two values `a` and `b` and push the result of `b / a`.
 
+### Modulo operation
+
+`%`
+Pop two values `a` and `b` and push the remainder of the Euclidean
+division of `b` by `a`.
+
+### Exponentiation
+
+`^` 
+Pop two values `a` and `b` and push the result of `b ^ a`.
+
+### Rounding
+
+`ceil`
+Pop the value `a` and push smallest integral value greater than or
+equal to `a`.
+
+`floor`
+Pop the value `a` and push largest integral value less than or equal
+to `a`.
+
+`round`
+Pop the value `a` and push integral value nearest to `a`.
+
 ### Stack manipulation
 
 `swap` 
