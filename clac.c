@@ -66,8 +66,8 @@ void eval(const char *input) {
 	top = 0;
 
 	for (i = 0; i < argc; i++) {
-		if (!strcmp(argv[i], "_")) {
-			push(hole);
+		if (isdigit(argv[i][0])) {
+			push(strtod(argv[i], NULL));
 		} else if (!strcmp(argv[i], "+")) {
 			a = pop();
 			b = pop();
@@ -84,6 +84,8 @@ void eval(const char *input) {
 			a = pop();
 			b = pop();
 			push(b / a);
+		} else if (!strcmp(argv[i], "_")) {
+			push(hole);
 		} else if (!strcasecmp(argv[i], "swap")) {
 			a = pop();
 			b = pop();
@@ -93,8 +95,6 @@ void eval(const char *input) {
 			a = pop();
 			push(a);
 			push(a);
-		} else if (isdigit(argv[i][0])) {
-			push(strtod(argv[i], NULL));
 		}
 	}
 
