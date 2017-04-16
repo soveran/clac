@@ -1,4 +1,4 @@
-FLAGS = -I./deps/linenoise -I./deps/sds
+FLAGS = -I./deps/linenoise -I./deps/sds -lm
 PREFIX?=/usr/local
 
 default: clac
