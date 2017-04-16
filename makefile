@@ -1,4 +1,4 @@
-FLAGS = -I./deps/linenoise -I./deps/sds -lm
+FLAGS = -I./deps/linenoise -I./deps/sds
 PREFIX?=/usr/local
 
 default: clac
@@ -10,7 +10,7 @@ deps/sds/sds.o:
 	@cd deps/sds && $(MAKE)
 
 clac: clac.c deps/linenoise/linenoise.o deps/sds/sds.o
-	$(CC) $(FLAGS) -Wall -Os -o clac clac.c deps/linenoise/linenoise.o deps/sds/sds.o
+	$(CC) $(FLAGS) -Wall -Os -o clac clac.c -lm deps/linenoise/linenoise.o deps/sds/sds.o
 
 clean:
 	@echo cleaning
