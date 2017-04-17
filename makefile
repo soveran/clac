@@ -1,7 +1,6 @@
 FLAGS = -I./deps/linenoise -I./deps/sds
 PREFIX?=/usr/local
-
-PANDOC=$(shell which pandoc)
+MANPREFIX?=${PREFIX}/share/man
 
 default: clac
 
@@ -26,22 +25,13 @@ install: clac
 	@cp -f clac ${PREFIX}/bin/clac
 	@chmod 755 ${PREFIX}/bin/clac
 
-install-man: man
-	@echo installing manpage
-	@mkdir -p ${PREFIX}/share/man/man1/
-	@cp -f clac.1 ${PREFIX}/share/man/man1
+	@echo installing manual pages to ${MANPREFIX}/man1
+	@mkdir -p ${PREFIX}/bin
+	@cp -f clac.1 ${MANPREFIX}/man1/clac.1
+	@chmod 644 ${MANPREFIX}/man1/clac.1
 
 uninstall:
 	@echo removing executable from ${PREFIX}/bin
 	@rm ${PREFIX}/bin/clac
-
-uninstall-man: man
-	@echo uninstalling manpage
-	@rm -p ${PREFIX}/share/man/man1/clac.1
-
-man: clac.1
-	
-clac.1: $(PANDOC)
-	@echo calling pandoc to generate manpage
-	@$(PANDOC) man/clac.md -s -t man -o clac.1
-
+	@echo removing manual pages from ${MANPREFIX}/man1
+	@rm ${MANPREFIX}/man1/clac.1
