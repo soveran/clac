@@ -27,6 +27,13 @@ updates.
 Installation
 ------------
 
+Download the [latest release][releases] or check the available
+[packages][packages]. You can also compile the source code in the
+master branch.
+
+[releases]: https://github.com/soveran/clac/releases
+[packages]: https://github.com/soveran/clac/wiki/Distribution-Packages
+
 Install clac into `/usr/local/bin` with the following command:
 
     $ make install
