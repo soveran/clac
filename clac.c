@@ -74,6 +74,7 @@ static void add(sds word, sds meaning) {
 	node *curr = find(word);
 
 	if (curr != NULL) {
+		fprintf(stderr, "Duplicate definition of \"%s\" in words file\n", word);
 		curr->meaning = meaning;
 		return;
 	}
