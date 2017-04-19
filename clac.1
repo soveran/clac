@@ -104,6 +104,27 @@ Pop the value `a` and push the values `a`, `a`.
 Push on the stack the result of the last operation.
 .El
 .
+.Ss User defined operations
+.
+It is possible to define operations (or
+.Em words ,
+as they are usually called in stack based programming languages)
+by editing the
+.Pa words
+configuration file. It is not created by default, but clac will use
+some environment variables in order to search for word definitions.
+.
+.Bl -tag -width X
+.It Ic $CLAC_WORDS
+If set, it should point to a file containing word definitions.
+.It Ic $XDG_CONFIG_HOME
+If set, clac will search for
+.Pa $XDG_CONFIG_HOME/clac/words
+.It Ic $HOME
+If set, clac will search for
+.Pa $HOME/.config/clac/words
+.El
+.
 .Sh EXAMPLES
 .
 Here are some examples of non-interactive invocations:
