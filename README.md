@@ -38,7 +38,8 @@ $ clac "3 4 +"
 7
 ```
 
-The following example illustrates what happens when there's more than one element left in the stack:
+The following example illustrates what happens when there's more
+than one element left in the stack:
 
 ```terminal
 $ clac "2 3 4 +"
