@@ -181,7 +181,7 @@ sqrt "0.5 ^"
 Then you can use them as if they were built-in commands:
 
 ```
-$ clac "42 dup * pi"
+$ clac "42 dup * pi *"
 5541.76
 ```
 
