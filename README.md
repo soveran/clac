@@ -23,6 +23,33 @@ useful for me, I've always found the UI a bit lacking. That's why
 I decided to try this idea of an always-visible stack with realtime
 updates.
 
+Usage
+-----
+
+If invoked without arguments, clac starts in interactive mode. If
+an expression is provided, clac will process it and print each
+element in the stack starting from the top. It will then exit
+immediately.
+
+Here are some examples of non-interactive invocations:
+
+```terminal
+$ clac "3 4 +"
+7
+```
+
+The following example illustrates what happens when there's more than one element left in the stack:
+
+```terminal
+$ clac "2 3 4 +"
+7
+2
+```
+
+When clac finishes evaluating the expression "2 3 4 +", there are
+two elements in the stack: the number 7 at the top of the stack and
+the number 2 at the bottom of the stack. The elements are printed
+in order, one per line, starting from the top of the stack.
 
 Installation
 ------------
@@ -122,6 +149,42 @@ ahead implementing commands just in case. That said, let me know
 if you find use cases for other commands (or even for `drop`!) and
 we will either find a better solution or we'll end up implementing
 them.
+
+User defined operations
+-----------------------
+
+It is possible to define operations (or _words_, as they are usually
+called in stack based programming languages) by editing the `words`
+configuration file. It is not created by default, but clac will use
+some environment variables in order to search for word definitions.
+
+`$CLAC_WORDS`
+If set, it should point to a file containing word definitions.
+
+`$XDG_CONFIG_HOME`
+If set, clac will search for `$XDG_CONFIG_HOME/clac/words`.
+
+`$HOME`
+If set, clac will search for `$HOME/.config/clac/words`.
+
+### How to define words
+
+Words are defined as aliases, with one alias on each line. Empty
+lines are ignored. Here are some examples:
+
+```
+pi 3.141592
+tau "pi 2 *"
+sqrt "0.5 ^"
+```
+
+Then you can use them as if they were built-in commands:
+
+```
+$ clac "42 dup * pi"
+5541.76
+```
+
 
 Contributing
 ------------

@@ -9,6 +9,7 @@
 .Sh SYNOPSIS
 .
 .Nm
+.Op Ar expression
 .
 .Sh DESCRIPTION
 .
@@ -23,6 +24,13 @@ stack and push the result. As all the operations take a fix number
 of arguments, there's no room for ambiguity: parenthesis and operator
 precedence are not needed. Postfix notation is also known as reverse
 Polish notation, or RPN.
+.
+.Ss Non-interactive mode
+.
+If an
+.Em expression
+is provided, clac will process it and print each element in the
+stack starting from the top. It will then exit immediately.
 .
 .Ss Commands
 .
@@ -95,6 +103,23 @@ Pop the value `a` and push the values `a`, `a`.
 .It Ic _
 Push on the stack the result of the last operation.
 .El
+.
+.Sh EXAMPLES
+.
+Here are some examples of non-interactive invocations:
+.
+.Pp
+.Dl $ clac "3 4 +"
+.Dl 7
+.Pp
+.Dl $ clac "2 3 4 +"
+.Dl 7
+.Dl 2
+.Pp
+When clac finishes evaluating the expression "2 3 4 +", there are
+two elements in the stack: the number 7 at the top of the stack and
+the number 2 at the bottom of the stack. The elements are printed
+in order, one per line, starting from the top of the stack.
 .
 .Sh AUTHOR
 .An Michel Martens Aq mail@soveran.com
