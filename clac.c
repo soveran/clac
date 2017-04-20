@@ -51,7 +51,6 @@ typedef struct node {
 	sds word;
 	sds meaning;
 	struct node *next;
-	struct node *prev;
 } node;
 
 static node *head = NULL;
