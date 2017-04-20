@@ -309,6 +309,11 @@ int main(int argc, char **argv) {
 		exit(0);
 	}
 
+	if (argc > 2) {
+		fprintf(stderr, "usage: clac [expression]\n");
+		exit(1);
+	}
+
 	linenoiseSetHintsCallback(hints);
 
 	while((line = linenoise("> ")) != NULL) {
