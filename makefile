@@ -29,7 +29,7 @@ install: clac
 	@chmod 755 ${PREFIX}/bin/clac
 
 	@echo installing manual pages to ${MANPREFIX}/man1
-	@mkdir -p ${PREFIX}/bin
+	@mkdir -p ${MANPREFIX}/man1
 	@cp -f clac.1 ${MANPREFIX}/man1/clac.1
 	@chmod 644 ${MANPREFIX}/man1/clac.1
 
