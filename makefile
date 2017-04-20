@@ -38,3 +38,8 @@ uninstall:
 	@rm ${PREFIX}/bin/clac
 	@echo removing manual pages from ${MANPREFIX}/man1
 	@rm ${MANPREFIX}/man1/clac.1
+
+test:
+	@sh test/tests.sh
+
+.PHONY: clean install uninstall test
