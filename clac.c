@@ -232,12 +232,12 @@ static void process(sds word) {
 		push(a);
  	} else if ((n = find(word)) != NULL) {
  		eval(n->meaning);
-	} else if (isdigit(word[0])) {
+	} else {
 		a = strtod(word, &z);
 
 		if (*z == '\0') {
 			push(a);
-		} else {
+		} else if (!isalpha(word[0])) {
 			push(NAN);
 		}
 	}
