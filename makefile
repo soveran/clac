@@ -1,6 +1,7 @@
 FLAGS = -I./deps/linenoise -I./deps/sds
 PREFIX?=/usr/local
 MANPREFIX?=${PREFIX}/share/man
+STRIP?=strip
 
 default: clac
 
@@ -20,6 +21,8 @@ clean:
 	@rm -f deps/linenoise/linenoise.o
 
 install: clac
+	@echo stripping executable
+	@${STRIP} clac
 	@echo installing executable to ${PREFIX}/bin
 	@mkdir -p ${PREFIX}/bin
 	@cp -f clac ${PREFIX}/bin/clac
