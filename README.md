@@ -23,35 +23,6 @@ useful for me, I've always found the UI a bit lacking. That's why
 I decided to try this idea of an always-visible stack with realtime
 updates.
 
-Usage
------
-
-If invoked without arguments, clac starts in interactive mode. If
-an expression is provided, clac will process it and print each
-element in the stack starting from the top. It will then exit
-immediately.
-
-Here are some examples of non-interactive invocations:
-
-```terminal
-$ clac "3 4 +"
-7
-```
-
-The following example illustrates what happens when there's more
-than one element left in the stack:
-
-```terminal
-$ clac "2 3 4 +"
-7
-2
-```
-
-When clac finishes evaluating the expression "2 3 4 +", there are
-two elements in the stack: the number 7 at the top of the stack and
-the number 2 at the bottom of the stack. The elements are printed
-in order, one per line, starting from the top of the stack.
-
 Installation
 ------------
 
@@ -173,19 +144,57 @@ If set, clac will search for `$HOME/.config/clac/words`.
 Words are defined as aliases, with one alias on each line. Empty
 lines are ignored. Here are some examples:
 
-```
+```shell
 pi 3.141592
 tau "pi 2 *"
 sqrt "0.5 ^"
 ```
 
-Then you can use them as if they were built-in commands:
+Note that an alias has two parts: a word to be defined and its
+meaning. That's why the `tau` and `sqrt` definitions are enclosed
+in double quotes. If the double quotes are removed, clac will
+complain that it can't parse the command. For example, if we remove
+the double quotes from `sqrt` and start clac, we will get this error
+message:
 
 ```
+Incorrect definition: sqrt 0.5 ^
+(~/.config/clac/words:3)
+```
+
+User defined words can be used as if they were built-in commands:
+
+```shell
 $ clac "42 dup * pi *"
 5541.76
 ```
 
+Non-interactive mode
+--------------------
+
+While the most interesting aspect of clac is the ability to visualize
+the stack as it is updated with each key press, at some point you
+may want use clac just to get a quick result or call it from a
+script. For that reason, clac can be used in non-interactive mode
+by invoking it with an argument.
+
+### Examples
+
+Here are some examples of non-interactive invocations:
+
+```shell
+$ clac "3 4 +"
+7
+
+$ clac "2 3 4 +"
+7
+2
+```
+
+When clac finishes evaluating the expression "2 3 4 +", there are
+two elements in the stack: the number 7 at the top of the stack and
+the number 2 at the bottom of the stack. The elements are printed
+in order, one per line, starting from the top of the stack.
 
 Contributing
 ------------

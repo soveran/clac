@@ -125,17 +125,50 @@ If set, clac will search for
 .Pa $HOME/.config/clac/words
 .El
 .
+.Ss How to define words
+.
+Words are defined as aliases, with one alias on each line. Empty
+lines are ignored. Here are some examples:
+.Pp
+.Dl Sy pi No 3.141592
+.Dl Sy tau Qq "pi 2 *"
+.Dl Sy sqrt Qq "0.5 ^"
+.Pp
+Note that an alias has two parts: a word to be defined and its
+meaning. That's why the
+.Sy tau
+and
+.Sy sqrt
+definitions are enclosed in double quotes. If the double quotes are
+removed, clac will complain that it can't parse the command. For
+example, if we remove the double quotes from
+.Sy sqrt
+and start clac, we will get this error message:
+.Pp
+.Dl Incorrect definition: sqrt 0.5 ^
+.Dl (~/.config/clac/words:3)
+.Pp
+User defined words can be used as if they were built-in commands:
+.Pp
+.Dl $ clac Qq "42 dup * pi *"
+.Dl Sy 5541.76
+.
 .Sh EXAMPLES
 .
+While the most interesting aspect of clac is the ability to visualize
+the stack as it is updated with each key press, at some point you
+may want use clac just to get a quick result or call it from a
+script. For that reason, clac can be used in non-interactive mode
+by invoking it with an argument.
+.Pp
 Here are some examples of non-interactive invocations:
-.
 .Pp
-.Dl $ clac "3 4 +"
-.Dl 7
+.Dl $ clac Qq "3 4 +"
+.Dl Sy 7
 .Pp
-.Dl $ clac "2 3 4 +"
-.Dl 7
-.Dl 2
+.Dl $ clac Qq "2 3 4 +"
+.Dl Sy 7
+.Dl Sy 2
 .Pp
 When clac finishes evaluating the expression "2 3 4 +", there are
 two elements in the stack: the number 7 at the top of the stack and
