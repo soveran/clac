@@ -112,7 +112,7 @@ static void move(stack *s, stack *t, int n) {
 	}
 }
 
-static void roll(stack *s, int m, int n) {
+static void roll(stack *s, stack *aux, int m, int n) {
 	if (m > count(s)) {
 		m = count(s);
 	}
@@ -134,10 +134,10 @@ static void roll(stack *s, int m, int n) {
 	double a;
 
 	while (n > 0) {
-		a = pop(s0);
-		move(s0, s1, m);
-		push(s0, a);
-		move(s1, s0, m);
+		a = pop(s);
+		move(s, aux, m);
+		push(s, a);
+		move(aux, s, m);
 		n--;
 	}
 }
@@ -338,7 +338,7 @@ static void process(sds word) {
 		a = pop(s0);
 		b = pop(s0);
 
-		roll(s0, b, a);
+		roll(s0, s1, b, a);
 	} else if (!strcasecmp(word, "swap")) {
 		if (count(s0) > 1) {
 			a = pop(s0);
