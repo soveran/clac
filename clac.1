@@ -80,6 +80,16 @@ division of `b` by `a`.
 Pop two values `a` and `b` and push the result of `b ^ a`.
 .El
 .
+.Ss Summation
+.
+.Bl -tag -width Fl
+.It Ic sum
+Pop two values `a` and `b` and push the result of `b ^ a`.
+.It Ic add
+Pop the value `a` and remove that many items from the stack. Push
+their sum.
+.El
+.
 .Ss Rounding
 .
 .Bl -tag -width Fl
@@ -93,6 +103,13 @@ to `a`.
 Pop the value `a` and push integral value nearest to `a`.
 .El
 .
+.Ss Absolute value
+.
+.Bl -tag -width Fl
+.It Ic abs
+Pop the value `a` and push the non-negative value of `a`.
+.El
+.
 .Ss Stack manipulation
 .
 .Bl -tag -width Fl
@@ -100,8 +117,34 @@ Pop the value `a` and push integral value nearest to `a`.
 Pop two values `a` and `b` and push the values `a`, `b`.
 .It Ic dup
 Pop the value `a` and push the values `a`, `a`.
+.It Ic roll
+Pop two values `a` and `b` and rotate `b` elements in the stack `a`
+times.
+.It Ic drop
+Remove the top of the stack.
+.It Ic clear
+Remove all the elements in the stack.
+.It Ic count
+Push the the number of items in the stack.
 .It Ic _
 Push on the stack the result of the last operation.
+.El
+.
+.Ss Stashing
+.
+.Bl -tag -width Fl
+.It Ic stash
+Pop the value `a` and move that many items to the stash.
+.It Ic fetch
+Pop the value `a` and move that many items from the stash.
+.It Ic .
+Stash the top of the stack.
+.It Ic ,
+Fetch one stashed item.
+.It Ic :
+Stash all the items in the stack.
+.It Ic ;
+Fetch all stashed items.
 .El
 .
 .Ss User defined operations
@@ -153,6 +196,14 @@ User defined words can be used as if they were built-in commands:
 .Dl $ clac Qq "42 dup * pi *"
 .Dl Sy 5541.76
 .
+.Ss How to list defined words
+.
+If you type `words` and hit enter, clac will list the defined words.
+.
+.Ss How to reload defined words
+.
+If you type `reload` and hit enter, clac will reload the words file.
+.
 .Sh EXAMPLES
 .
 While the most interesting aspect of clac is the ability to visualize
@@ -174,6 +225,25 @@ When clac finishes evaluating the expression "2 3 4 +", there are
 two elements in the stack: the number 7 at the top of the stack and
 the number 2 at the bottom of the stack. The elements are printed
 in order, one per line, starting from the top of the stack.
+.Pp
+This other example uses the stashing features. Let's say we want
+to push two numbers and get the result of their multiplication plus
+the square of the second number.
+.Pp
+.Dl $ clac Qq "4 3 dup dup * . * , +"
+.Dl Sy 21
+.Pp
+Another example that uses the stash would be to get the average of
+all the elements in the stack:
+.Pp
+.Dl $ clac Qq "1 2 3 4 count . sum , /"
+.Dl Sy 2.5
+.Pp
+In fact, if you find yourself calculating averages very often, you can
+define the word
+.Sy avg
+as
+.Qq Sy "count . sum , /" .
 .
 .Sh AUTHOR
 .An Michel Martens Aq mail@soveran.com

@@ -84,6 +84,15 @@ division of `b` by `a`.
 `^` 
 Pop two values `a` and `b` and push the result of `b ^ a`.
 
+### Summation
+
+`sum`
+Pop all the values in the stack and push their sum.
+
+`add`
+Pop the value `a` and remove that many items from the stack. Push
+their sum.
+
 ### Rounding
 
 `ceil`
@@ -97,6 +106,11 @@ to `a`.
 `round`
 Pop the value `a` and push integral value nearest to `a`.
 
+### Absolute value
+
+`abs`
+Pop the value `a` and push the non-negative value of `a`.
+
 ### Stack manipulation
 
 `swap` 
@@ -105,22 +119,41 @@ Pop two values `a` and `b` and push the values `a`, `b`.
 `dup`
 Pop the value `a` and push the values `a`, `a`.
 
+`roll`
+Pop two values `a` and `b` and rotate `b` elements in the stack `a`
+times.
+
+`drop`
+Remove the top of the stack.
+
+`clear`
+Remove all the elements in the stack.
+
+`count`
+Push the the number of items in the stack.
+
 `_` 
 Push on the stack the result of the last operation.
 
-### What is missing
+### Stashing
 
-It is likely that more operations will be added in the future. I
-didn't add every possible stack manipulation command because I'm
-trying to let usage define the API, and the fact that the calculator
-has line editing capabilities makes some commands less useful. For
-example, `drop` is trivial to implement (two lines of code), yet I
-didn't include it in the API because I haven't had the need to use
-it so far. I like to keep the code short, that's why I didn't go
-ahead implementing commands just in case. That said, let me know
-if you find use cases for other commands (or even for `drop`!) and
-we will either find a better solution or we'll end up implementing
-them.
+`stash`
+Pop the value `a` and move that many items to the stash.
+
+`fetch`
+Pop the value `a` and move that many items from the stash.
+
+`.`
+Stash the top of the stack.
+
+`,`
+Fetch one stashed item.
+
+`:`
+Stash all the items in the stack.
+
+`;`
+Fetch all stashed items.
 
 User defined operations
 -----------------------
@@ -169,6 +202,14 @@ $ clac "42 dup * pi *"
 5541.76
 ```
 
+### How to list defined words
+
+If you type `words` and hit enter, clac will list the defined words.
+
+### How to reload defined words
+
+If you type `reload` and hit enter, clac will reload the words file.
+
 Non-interactive mode
 --------------------
 
@@ -195,6 +236,26 @@ When clac finishes evaluating the expression "2 3 4 +", there are
 two elements in the stack: the number 7 at the top of the stack and
 the number 2 at the bottom of the stack. The elements are printed
 in order, one per line, starting from the top of the stack.
+
+This other example uses the stashing features. Let's say we want
+to push two numbers and get the result of their multiplication plus
+the square of the second number.
+
+```shell
+$ clac Qq "4 3 dup dup * . * , +"
+21
+```
+
+Another example that uses the stash would be to get the average of
+all the elements in the stack:
+
+```shell
+$ clac Qq "1 2 3 4 count . sum , /"
+2.5
+```
+
+In fact, if you find yourself calculating averages very often, you
+can define the word `avg` as `"count . sum , /"`.
 
 Contributing
 ------------
