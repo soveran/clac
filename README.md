@@ -242,7 +242,7 @@ to push two numbers and get the result of their multiplication plus
 the square of the second number.
 
 ```shell
-$ clac Qq "4 3 dup dup * . * , +"
+$ clac "4 3 dup dup * . * , +"
 21
 ```
 
@@ -250,7 +250,7 @@ Another example that uses the stash would be to get the average of
 all the elements in the stack:
 
 ```shell
-$ clac Qq "1 2 3 4 count . sum , /"
+$ clac "1 2 3 4 count . sum , /"
 2.5
 ```
 
