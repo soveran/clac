@@ -84,6 +84,25 @@ division of `b` by `a`.
 `^` 
 Pop two values `a` and `b` and push the result of `b ^ a`.
 
+### Logarithm
+
+`ln` 
+Pop the value `a` and push its natural logarithm.
+
+`log` 
+Pop the value `a` and push its logarithm to base 10.
+
+### Trigonometry
+
+`sin` 
+Pop the value `a` and push its sine.
+
+`cos` 
+Pop the value `a` and push its cosine.
+
+`tan` 
+Pop the value `a` and push its tangent.
+
 ### Summation
 
 `sum`

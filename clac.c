@@ -330,6 +330,26 @@ static void process(sds word) {
 		if (count(s0) > 0) {
 			push(s0, round(pop(s0)));
 		}
+	} else if (!strcasecmp(word, "sin")) {
+		if (count(s0) > 0) {
+			push(s0, sin(pop(s0)));
+		}
+	} else if (!strcasecmp(word, "cos")) {
+		if (count(s0) > 0) {
+			push(s0, cos(pop(s0)));
+		}
+	} else if (!strcasecmp(word, "tan")) {
+		if (count(s0) > 0) {
+			push(s0, tan(pop(s0)));
+		}
+	} else if (!strcasecmp(word, "ln")) {
+		if (count(s0) > 0) {
+			push(s0, log(pop(s0)));
+		}
+	} else if (!strcasecmp(word, "log")) {
+		if (count(s0) > 0) {
+			push(s0, log10(pop(s0)));
+		}
 	} else if (!strcasecmp(word, "dup")) {
 		if (!isempty(s0)) {
 			push(s0, peek(s0));
