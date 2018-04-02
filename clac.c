@@ -510,6 +510,7 @@ int main(int argc, char **argv) {
 		}
 
 		sdsclear(result);
+		linenoiseHistoryAdd(line);
 		free(line);
 	}
 
