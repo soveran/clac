@@ -92,6 +92,11 @@ Pop the value `a` and push its natural logarithm.
 `log` 
 Pop the value `a` and push its logarithm to base 10.
 
+### Factorial
+
+`!` 
+Pop the value `a` and push its factorial.
+
 ### Trigonometry
 
 `sin` 
