@@ -179,6 +179,12 @@ Stash all the items in the stack.
 `;`
 Fetch all stashed items.
 
+History
+-------
+
+Use `<C-p>`/`<C-n>` or the `<Up>`/`<Down>` arrow keys to navigate
+the history.
+
 User defined operations
 -----------------------
 
