@@ -1,8 +1,19 @@
-all: sds-test
+STD=
+WARN= -Wall
+OPT= -Os
 
-sds-test: sds.c sds.h testhelp.h
-	$(CC) -o sds-test sds.c -Wall -std=c99 -pedantic -O2 -DSDS_TEST_MAIN
-	@echo ">>> Type ./sds-test to run the sds.c unit tests."
+R_CFLAGS= $(STD) $(WARN) $(OPT) $(DEBUG) $(CFLAGS)
+R_LDFLAGS= $(LDFLAGS)
+DEBUG= -g
+
+R_CC=$(CC) $(R_CFLAGS)
+R_LD=$(CC) $(R_LDFLAGS)
+
+sds.o: sds.h sds.c
+
+.c.o:
+	$(R_CC) -c $<
 
 clean:
-	rm -f sds-test
+	rm -f *.o
+
