@@ -42,4 +42,4 @@ uninstall:
 test:
 	@sh test/tests.sh
 
-.PHONY: clean install uninstall test
+.PHONY: clean install uninstall test clac
