@@ -51,8 +51,8 @@ represented by the letter `a`, while the second value popped is
 represented by the letter `b`. For example, if the stack is composed
 of the number `1`, `2` and `3` (with `3` at the top of the stack),
 when we describe the sum then `a` will be `3` and `b` will be `2`.
-It is important to note that substraction and division invert the
-order of the arguments before peforming the operation: with `1`,
+It is important to note that subtraction and division invert the
+order of the arguments before performing the operation: with `1`,
 `2` and `3` in the stack, when you type `-` it will pop the values
 `3` and `2` and push the result of `2 - 3`. This is in the tradition
 of other postfix calculators and programming languages.
@@ -61,16 +61,16 @@ Here's a description of the available commands:
 
 ### Arithmetic operations
 
-`+` 
+`+`
 Pop two values `a` and `b` and push the result of `a + b`.
 
-`-` 
+`-`
 Pop two values `a` and `b` and push the result of `b - a`.
 
-`*` 
+`*`
 Pop two values `a` and `b` and push the result of `a * b`.
 
-`/` 
+`/`
 Pop two values `a` and `b` and push the result of `b / a`.
 
 ### Modulo operation
@@ -81,32 +81,45 @@ division of `b` by `a`.
 
 ### Exponentiation
 
-`^` 
+`^`
 Pop two values `a` and `b` and push the result of `b ^ a`.
 
 ### Logarithm
 
-`ln` 
+`ln`
 Pop the value `a` and push its natural logarithm.
 
-`log` 
+`log`
 Pop the value `a` and push its logarithm to base 10.
 
 ### Factorial
 
-`!` 
+`!`
 Pop the value `a` and push its factorial.
 
 ### Trigonometry
 
-`sin` 
+`sin`
 Pop the value `a` and push its sine.
 
-`cos` 
+`cos`
 Pop the value `a` and push its cosine.
 
-`tan` 
+`tan`
 Pop the value `a` and push its tangent.
+
+`asin`
+Pop the value `a` and push its arc sine.
+
+`acos`
+Pop the value `a` and push its arc cosine.
+
+`atan`
+Pop the value `a` and push its arc tangent.
+
+`atan2`
+Pop two values `a` and `b` and push the arc tangent of `b / a`,
+using the signs of `a` and `b` to determine the quadrant.
 
 ### Summation
 
@@ -120,15 +133,15 @@ their sum.
 ### Rounding
 
 `ceil`
-Pop the value `a` and push smallest integral value greater than or
+Pop the value `a` and push the smallest integer value greater than or
 equal to `a`.
 
 `floor`
-Pop the value `a` and push largest integral value less than or equal
-to `a`.
+Pop the value `a` and push the largest integer value less than or
+equal to `a`.
 
 `round`
-Pop the value `a` and push integral value nearest to `a`.
+Pop the value `a` and push the integer value closest to `a`.
 
 ### Absolute value
 
@@ -137,7 +150,7 @@ Pop the value `a` and push the non-negative value of `a`.
 
 ### Stack manipulation
 
-`swap` 
+`swap`
 Pop two values `a` and `b` and push the values `a`, `b`.
 
 `dup`
@@ -154,9 +167,9 @@ Remove the top of the stack.
 Remove all the elements in the stack.
 
 `count`
-Push the the number of items in the stack.
+Push the number of items in the stack.
 
-`_` 
+`_`
 Push on the stack the result of the last operation.
 
 ### Stashing
@@ -208,7 +221,7 @@ Words are defined as aliases, with one alias on each line. Empty
 lines are ignored. Here are some examples:
 
 ```shell
-pi 3.141592
+pi 3.14159265358979323846
 tau "pi 2 *"
 sqrt "0.5 ^"
 ```
@@ -229,7 +242,7 @@ User defined words can be used as if they were built-in commands:
 
 ```shell
 $ clac "42 dup * pi *"
-5541.76
+5541.76944093239
 ```
 
 ### How to list defined words

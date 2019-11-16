@@ -20,8 +20,8 @@ stack changes are reflected immediately.
 .Pp
 In a stack-based postfix calculator, entering a number pushes it
 on a stack, and arithmetic operations pop their arguments from the
-stack and push the result. As all the operations take a fix number
-of arguments, there's no room for ambiguity: parenthesis and operator
+stack and push the result. As all the operations take a fixed number
+of arguments, there's no room for ambiguity: parentheses and operator
 precedence are not needed. Postfix notation is also known as reverse
 Polish notation, or RPN.
 .
@@ -61,7 +61,7 @@ Pop two values `a` and `b` and push the result of `b - a`.
 .It Ic *
 Pop two values `a` and `b` and push the result of `a * b`.
 .
-.It Ic / 
+.It Ic /
 Pop two values `a` and `b` and push the result of `b / a`.
 .El
 .
@@ -105,6 +105,15 @@ Pop the value `a` and push its sine.
 Pop the value `a` and push its cosine.
 .It Ic tan
 Pop the value `a` and push its tangent.
+.It Ic asin
+Pop the value `a` and push its arc sine.
+.It Ic acos
+Pop the value `a` and push its arc cosine.
+.It Ic atan
+Pop the value `a` and push its arc tangent.
+.It Ic atan2
+Pop two values `a` and `b` and push the arc tangent of `b / a`,
+using the signs of `a` and `b` to determine the quadrant.
 .El
 .
 .Ss Summation
@@ -121,13 +130,13 @@ their sum.
 .
 .Bl -tag -width Fl
 .It Ic ceil
-Pop the value `a` and push smallest integral value greater than or
+Pop the value `a` and push the smallest integer value greater than or
 equal to `a`.
 .It Ic floor
-Pop the value `a` and push largest integral value less than or equal
-to `a`.
+Pop the value `a` and push the largest integer value less than or
+equal to `a`.
 .It Ic round
-Pop the value `a` and push integral value nearest to `a`.
+Pop the value `a` and push the integer value closest to `a`.
 .El
 .
 .Ss Absolute value
@@ -152,7 +161,7 @@ Remove the top of the stack.
 .It Ic clear
 Remove all the elements in the stack.
 .It Ic count
-Push the the number of items in the stack.
+Push the number of items in the stack.
 .It Ic _
 Push on the stack the result of the last operation.
 .El
@@ -212,7 +221,7 @@ If set, clac will search for
 Words are defined as aliases, with one alias on each line. Empty
 lines are ignored. Here are some examples:
 .Pp
-.Dl Sy pi No 3.141592
+.Dl Sy pi No 3.14159265358979323846
 .Dl Sy tau Qq "pi 2 *"
 .Dl Sy sqrt Qq "0.5 ^"
 .Pp
@@ -233,7 +242,7 @@ and start clac, we will get this error message:
 User defined words can be used as if they were built-in commands:
 .Pp
 .Dl $ clac Qq "42 dup * pi *"
-.Dl Sy 5541.76
+.Dl Sy 5541.76944093239
 .
 .Ss How to list defined words
 .
