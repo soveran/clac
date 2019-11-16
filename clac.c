@@ -37,12 +37,13 @@
 #include "linenoise.h"
 #include "sds.h"
 
-/* UI */  
+/* UI */
 #define HINT_COLOR 33
-#define OUTPUT_FMT "\x1b[33m= %g\x1b[0m\n"
+#define NUMBER_FMT "%.15g"
+#define OUTPUT_FMT "\x1b[33m= " NUMBER_FMT "\x1b[0m\n"
 #define WORDEF_FMT "%s \x1b[33m\"%s\"\x1b[0m\n"
 
-/* Config */  
+/* Config */
 #define BUFFER_MAX 1024
 #define WORDS_FILE "clac/words"
 #define CAPACITY   0xFF
@@ -54,7 +55,7 @@
 #define isempty(S) ((S)->top == 0)
 
 /* Arithmetic */
-#define modulo(A, B) (A - B * floor(A / B))
+#define modulo(A, B) ((A) - (B) * floor((A) / (B)))
 
 typedef struct stack {
 	double items[CAPACITY];
@@ -342,6 +343,24 @@ static void process(sds word) {
 		if (count(s0) > 0) {
 			push(s0, tan(pop(s0)));
 		}
+	} else if (!strcasecmp(word, "asin")) {
+		if (count(s0) > 0) {
+			push(s0, asin(pop(s0)));
+		}
+	} else if (!strcasecmp(word, "acos")) {
+		if (count(s0) > 0) {
+			push(s0, acos(pop(s0)));
+		}
+	} else if (!strcasecmp(word, "atan")) {
+		if (count(s0) > 0) {
+			push(s0, atan(pop(s0)));
+		}
+	} else if (!strcasecmp(word, "atan2")) {
+		if (count(s0) > 1) {
+			a = pop(s0);
+			b = pop(s0);
+			push(s0, atan2(b, a));
+		}
 	} else if (!strcasecmp(word, "ln")) {
 		if (count(s0) > 0) {
 			push(s0, log(pop(s0)));
@@ -430,14 +449,14 @@ static char *hints(const char *input, int *color, int *bold) {
 	result = sdscat(result, " ");
 
 	for (i = 0; i < count(s0); i++) {
-		result = sdscatprintf(result, " %g", s0->items[i]);
+		result = sdscatprintf(result, " " NUMBER_FMT, s0->items[i]);
 	}
 
 	if (!isempty(s1)) {
 		result = sdscat(result, " ⋮");
 
 		for (i = s1->top-1; i > -1; i--) {
-			result = sdscatprintf(result, " %g", s1->items[i]);
+			result = sdscatprintf(result, " " NUMBER_FMT, s1->items[i]);
 		}
 	}
 
@@ -478,7 +497,7 @@ int main(int argc, char **argv) {
 		eval(argv[1]);
 
 		while (count(s0) > 0) {
-			printf("%g\n", pop(s0));
+			printf(NUMBER_FMT "\n", pop(s0));
 		}
 
 		exit(0);
