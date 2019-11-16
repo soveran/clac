@@ -108,6 +108,19 @@ Pop the value `a` and push its cosine.
 `tan`
 Pop the value `a` and push its tangent.
 
+`asin`
+Pop the value `a` and push its arc sine.
+
+`acos`
+Pop the value `a` and push its arc cosine.
+
+`atan`
+Pop the value `a` and push its arc tangent.
+
+`atan2`
+Pop two values `a` and `b` and push the arc tangent of `b / a`,
+using the signs of `a` and `b` to determine the quadrant.
+
 ### Summation
 
 `sum`
