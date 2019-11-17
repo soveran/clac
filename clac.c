@@ -369,6 +369,10 @@ static void process(sds word) {
 		if (count(s0) > 0) {
 			push(s0, log10(pop(s0)));
 		}
+	} else if (!strcasecmp(word, "erf")) {
+		if (count(s0) > 0) {
+			push(s0, erf(pop(s0)));
+		}
 	} else if (!strcasecmp(word, "!")) {
 		if (count(s0) > 0) {
 			a = pop(s0);

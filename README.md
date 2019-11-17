@@ -121,6 +121,11 @@ Pop the value `a` and push its arc tangent.
 Pop two values `a` and `b` and push the arc tangent of `b / a`,
 using the signs of `a` and `b` to determine the quadrant.
 
+### Error function
+
+`erf`
+Pop the value `a` and push its error function.
+
 ### Summation
 
 `sum`
