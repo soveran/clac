@@ -224,6 +224,17 @@ static int parse(sds input) {
 	return 0;
 }
 
+static void finalize_list() {
+	node *prev, *curr, *next;
+	prev = NULL;
+	for (curr = head; curr != NULL; curr = next) {
+		next = curr->next;
+		curr->next = prev;
+		prev = curr;
+	}
+	head = prev;
+}
+
 static void load(sds filename) {
 	FILE *fp;
 
@@ -264,6 +275,8 @@ static void load(sds filename) {
 
 	sdsfreesplitres(lines, linecount);
 	sdsfree(content);
+
+	finalize_list();
 }
 
 static void eval(const char *input);
