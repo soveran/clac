@@ -22,10 +22,10 @@ assert_equal "2" `./clac "7 5 %"`
 assert_equal "10" `./clac "1 2 3 4 sum"`
 
 # User defined word
-assert_equal "3.14159" `./clac pi`
+assert_equal "3.141592" `./clac pi`
 
 # Word defined based on user defined word
-assert_equal "6.28318" `./clac tau`
+assert_equal "6.283184" `./clac tau`
 
 # Not found words starting with digits result in nan
 assert_equal "nan" `./clac 3+`
