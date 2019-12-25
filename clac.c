@@ -72,6 +72,7 @@ static stack stacks[] = {{{}, 0}, {{}, 0}};
 static stack *s0 = &stacks[0];
 static stack *s1 = &stacks[1];
 static node *head = NULL;
+static node *tail = NULL;
 static sds result;
 static double hole = 0;
 
@@ -186,8 +187,13 @@ static void set(sds word, sds meaning) {
 
 	curr->word = word;
 	curr->meaning = meaning;
-	curr->next = head;
-	head = curr;
+	curr->next = NULL;
+	if (head == NULL) {
+		head = curr;
+	} else {
+		tail->next = curr;
+	}
+	tail = curr;
 }
 
 static void cleanup() {
@@ -222,17 +228,6 @@ static int parse(sds input) {
 	set(argv[0], argv[1]);
 
 	return 0;
-}
-
-static void finalize_list() {
-	node *prev, *curr, *next;
-	prev = NULL;
-	for (curr = head; curr != NULL; curr = next) {
-		next = curr->next;
-		curr->next = prev;
-		prev = curr;
-	}
-	head = prev;
 }
 
 static void load(sds filename) {
@@ -275,8 +270,6 @@ static void load(sds filename) {
 
 	sdsfreesplitres(lines, linecount);
 	sdsfree(content);
-
-	finalize_list();
 }
 
 static void eval(const char *input);
