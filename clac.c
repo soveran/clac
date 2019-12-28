@@ -72,6 +72,7 @@ static stack stacks[] = {{{}, 0}, {{}, 0}};
 static stack *s0 = &stacks[0];
 static stack *s1 = &stacks[1];
 static node *head = NULL;
+static node *tail = NULL;
 static sds result;
 static double hole = 0;
 
@@ -186,8 +187,13 @@ static void set(sds word, sds meaning) {
 
 	curr->word = word;
 	curr->meaning = meaning;
-	curr->next = head;
-	head = curr;
+	curr->next = NULL;
+	if (head == NULL) {
+		head = curr;
+	} else {
+		tail->next = curr;
+	}
+	tail = curr;
 }
 
 static void cleanup() {
