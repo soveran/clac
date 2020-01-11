@@ -305,6 +305,40 @@ $ clac "1 2 3 4 count . sum , /"
 In fact, if you find yourself calculating averages very often, you
 can define the word `avg` as `"count . sum , /"`.
 
+### Changing the decimal separator and the thousands separator
+
+In many countries, the comma is the decimal separator.
+To make clac handle the comma in numbers as if it were a dot,
+start it with the `-c` option. To make it display commas instead of
+dots start it with the `-d` option:
+
+```shell
+$ clac -c "1.2 3,4 *"
+4.08
+
+$ clac -cd "1.2 3,4 *"
+4,08
+```
+
+To make clac ignore thousands separators in numbers, start it with
+the `-t` option. What the thousands separator is, depends on whether
+`-c` is present or not. The default thousands separator is the comma,
+with `-c` it becomes the dot. This means that when clac is started
+with both the `-c` and `-t` options (e.g., with `-ct`), the dot is
+not recognized as a decimal separator.
+
+```shell
+$ clac -t "123,456.99"
+123456.99
+
+$ clac -cd "123.000 4,567 +"
+127,567
+
+$ clac -cdt "123.000 4,567 +"
+123004,567
+```
+
+
 Contributing
 ------------
 

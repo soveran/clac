@@ -33,6 +33,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <locale.h>
 #include <math.h>
 #include "linenoise.h"
 #include "sds.h"
@@ -40,7 +41,8 @@
 /* UI */
 #define HINT_COLOR 33
 #define NUMBER_FMT "%.15g"
-#define OUTPUT_FMT "\x1b[33m= " NUMBER_FMT "\x1b[0m\n"
+#define NUMBER_FMT_MAX_STRLEN 22
+#define OUTPUT_FMT "\x1b[33m= %s\x1b[0m\n"
 #define WORDEF_FMT "%s \x1b[33m\"%s\"\x1b[0m\n"
 
 /* Config */
@@ -75,6 +77,9 @@ static node *head = NULL;
 static node *tail = NULL;
 static sds result;
 static double hole = 0;
+static char decsep = '.';
+static char thousep = '\0';
+static int displaycomma = 0;
 
 static int isoverflow(stack *s) {
 	if (isfull(s)) {
@@ -272,11 +277,25 @@ static void load(sds filename) {
 	sdsfree(content);
 }
 
+static char *number(double dbl) {
+	static char buffer[NUMBER_FMT_MAX_STRLEN + 1];
+	char *c;
+
+	sprintf(buffer, NUMBER_FMT, dbl);
+
+	if (displaycomma) {
+		for (c = buffer; *c; c++) {
+			if (*c == '.') *c = ',';
+		}
+	}
+	return buffer;
+}
+
 static void eval(const char *input);
 
 static void process(sds word) {
 	double a, b;
-	char *z;
+	char *c, *d, *z;
 	node *n;
 
 	if (!strcmp(word, "_")) {
@@ -423,6 +442,16 @@ static void process(sds word) {
  	} else if ((n = get(word)) != NULL) {
  		eval(n->meaning);
 	} else {
+		if (decsep != '.' || thousep != '\0') {
+			for (d = c = word; *c; c++) {
+				if (*c == decsep) {
+					*d++ = '.';
+				} else if (*c != thousep) {
+					*d++ = *c;
+				}
+			}
+			*d = '\0';
+		}
 		a = strtod(word, &z);
 
 		if (*z == '\0') {
@@ -459,14 +488,14 @@ static char *hints(const char *input, int *color, int *bold) {
 	result = sdscat(result, " ");
 
 	for (i = 0; i < count(s0); i++) {
-		result = sdscatprintf(result, " " NUMBER_FMT, s0->items[i]);
+		result = sdscatprintf(result, " %s", number(s0->items[i]));
 	}
 
 	if (!isempty(s1)) {
 		result = sdscat(result, " ⋮");
 
 		for (i = s1->top-1; i > -1; i--) {
-			result = sdscatprintf(result, " " NUMBER_FMT, s1->items[i]);
+			result = sdscatprintf(result, " %s", number(s1->items[i]));
 		}
 	}
 
@@ -497,25 +526,48 @@ static void config() {
 }
 
 int main(int argc, char **argv) {
-	char *line;
+	char *line, *expr = NULL;
+	int i, j;
+
+	setlocale(LC_NUMERIC, "C");
 
 	result = sdsempty();
 
 	config();
 
-	if (argc == 2) {
-		eval(argv[1]);
+	for (i = 1; i < argc; i++) {
+		if (strlen(argv[i]) > 1 && argv[i][0] == '-' && isalpha(argv[i][1])) {
+			for (j = 1; j < strlen(argv[i]); j++) {
+				switch (argv[i][j]) {
+					case 'c':
+						decsep = ',';
+						if (thousep) thousep = '.';
+						break;
+					case 'd':
+						displaycomma = 1;
+						break;
+					case 't':
+						thousep = (decsep == '.') ? ',' : '.';
+						break;
+					default:
+						goto usage_error;
+				}
+			}
+		} else if (expr == NULL) {
+			expr = argv[i];
+		} else {
+			goto usage_error;
+		}
+	}
+
+	if (expr != NULL) {
+		eval(expr);
 
 		while (count(s0) > 0) {
-			printf(NUMBER_FMT "\n", pop(s0));
+			printf("%s\n", number(pop(s0)));
 		}
 
 		exit(0);
-	}
-
-	if (argc > 2) {
-		fprintf(stderr, "usage: clac [expression]\n");
-		exit(1);
 	}
 
 	linenoiseSetHintsCallback(hints);
@@ -535,7 +587,7 @@ int main(int argc, char **argv) {
 		} else if (!isempty(s0)) {
 			hole = peek(s0);
 			clear(s0);
-			printf(OUTPUT_FMT, hole);
+			printf(OUTPUT_FMT, number(hole));
 		}
 
 		sdsclear(result);
@@ -547,4 +599,8 @@ int main(int argc, char **argv) {
 	cleanup();
 
 	return 0;
+
+usage_error:
+	fprintf(stderr, "usage: clac [-cdt] [expression]\n");
+	exit(1);
 }

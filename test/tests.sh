@@ -33,8 +33,25 @@ assert_equal "nan" `./clac 3+`
 # Not found words starting with alpha are ignored
 assert_equal "" `./clac foo`
 
-# Argument error (too many arguments)
-assert_equal "" `./clac 1 2 2> /dev/null`
+# Usage errors
+assert_equal "usage:" `./clac 1 2 2>&1` # too many arguments
+assert_equal "usage:" `./clac -o 2>&1` # unknown argument
+assert_equal "usage:" `./clac -cto 2>&1` # known and unknown arguments
+
+# Decimal and thousands separator
+assert_equal "3001000.08" `./clac -c "1000,2 3000.4 *"`
+assert_equal "nan" `./clac -c "1.000,2"`
+assert_equal "1000,2" `./clac -d "1000.2"`
+assert_equal "1000.2" `./clac -t "1,000.2"`
+assert_equal "1000.2" `./clac -ct "1.000,2"`
+assert_equal "1000,2" `./clac -cdt "1.000,2"`
+assert_equal "1000.2" `./clac -c "3001000,08 3000.4 /"`
+assert_equal "1000,2" `./clac -cd "3001000,08 3000.4 /"`
+assert_equal "100.02" `./clac -ct "3.001.000,08 3000.4 /"`
+assert_equal "1000,2" `./clac -ctd "3.001.000,08 3.000,40 /"`
+assert_equal "3001000.08" `./clac -t "1,000.20 3,000.40 *"`
+assert_equal "3001000,08" `./clac -td "1,000.20 3,000.40 *"`
+assert_equal "3001000,08" `./clac -tcd "1.000,20 3.000,40 *"`
 
 # Stashing numbers
 assert_equal "21" `./clac "4 3 9 . * , +"`
