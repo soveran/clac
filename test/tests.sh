@@ -52,6 +52,7 @@ assert_equal "1000,2" `./clac -ctd "3.001.000,08 3.000,40 /"`
 assert_equal "3001000.08" `./clac -t "1,000.20 3,000.40 *"`
 assert_equal "3001000,08" `./clac -td "1,000.20 3,000.40 *"`
 assert_equal "3001000,08" `./clac -tcd "1.000,20 3.000,40 *"`
+assert_equal "3141,592" `./clac -cdt "pi 1.000,000 *"`
 
 # Stashing numbers
 assert_equal "21" `./clac "4 3 9 . * , +"`

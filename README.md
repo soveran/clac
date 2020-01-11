@@ -338,6 +338,12 @@ $ clac -cdt "123.000 4,567 +"
 123004,567
 ```
 
+The definition of words in the configuration file is always parsed
+_without_ the `-c` and `-t` options, i.e., numbers therein may only
+use the dot as the decimal separator and may not use any thousands
+separator. This way the configuration files doesn't change its
+meaning depending on the options clac is started with.
+
 
 Contributing
 ------------

@@ -291,9 +291,9 @@ static char *number(double dbl) {
 	return buffer;
 }
 
-static void eval(const char *input);
+static void eval(const char *input, int toplevel);
 
-static void process(sds word) {
+static void process(sds word, int toplevel) {
 	double a, b;
 	char *c, *d, *z;
 	node *n;
@@ -439,10 +439,10 @@ static void process(sds word) {
 		move(s0, s1, count(s0));
 	} else if (!strcasecmp(word, ";")) {
 		move(s1, s0, count(s1));
- 	} else if ((n = get(word)) != NULL) {
- 		eval(n->meaning);
+	} else if ((n = get(word)) != NULL) {
+		eval(n->meaning, 0);
 	} else {
-		if (decsep != '.' || thousep != '\0') {
+		if (toplevel && (decsep != '.' || thousep != '\0')) {
 			for (d = c = word; *c; c++) {
 				if (*c == decsep) {
 					*d++ = '.';
@@ -462,13 +462,13 @@ static void process(sds word) {
 	}
 }
 
-static void eval(const char *input) {
+static void eval(const char *input, int toplevel) {
 	int i, argc;
 
 	sds *argv = sdssplitargs(input, &argc);
 
 	for (i = 0; i < argc; i++) {
-		process(argv[i]);
+		process(argv[i], toplevel);
 	}
 
 	sdsfreesplitres(argv, argc);
@@ -482,7 +482,7 @@ static char *hints(const char *input, int *color, int *bold) {
 	clear(s0);
 	clear(s1);
 
-	eval(input);
+	eval(input, 1);
 	sdsclear(result);
 
 	result = sdscat(result, " ");
@@ -561,7 +561,7 @@ int main(int argc, char **argv) {
 	}
 
 	if (expr != NULL) {
-		eval(expr);
+		eval(expr, 1);
 
 		while (count(s0) > 0) {
 			printf("%s\n", number(pop(s0)));
