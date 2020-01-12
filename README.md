@@ -305,43 +305,59 @@ $ clac "1 2 3 4 count . sum , /"
 In fact, if you find yourself calculating averages very often, you
 can define the word `avg` as `"count . sum , /"`.
 
-### Changing the decimal separator and the thousands separator
+### Separator modes
 
-In many countries, the comma is the decimal separator.
-To make clac handle the comma in numbers as if it were a dot,
-start it with the `-c` option. To make it display commas instead of
-dots start it with the `-d` option:
+In many countries the comma is the decimal separator.
+Furthermore a thousands separator is often used (in India it's a bit
+more complicated, but let's still call it like that).
+The following could be prices in three different countries:
+
+* `1,234,567.89 $`
+* `1.234.567,89 €`
+* `12.34.56.789 ₹`
+
+Clac has a total of 5 separator modes, that can be selected by
+starting it with one of the following options (if more are provided,
+the last one wins; if none is provided, `-d` is implied):
+
+* `-b`: "both" mode: both the `.` and the `,` are accepted as the
+  decimal separator. No thousands separator can be used.
+  In the output, the `.` is used as the decimal separator.
+
+* `-c`: "comma" mode: only the `,` is accepted as the decimal
+  separator. No thousands separator can be used.
+  In the output, the `,` is used as the decimal separator.
+
+* `-C`: "super comma" mode: the `,` is the decimal
+  separator, while the `.` is totally ignored in numbers.
+  In the output, the `,` is used as the decimal separator.
+
+* `-d`: "dot" mode (default): only the `.` is accepted as the
+  decimal separator. No thousands separator can be used.
+  In the output, the `.` is used as the decimal separator.
+
+* `-D`: "super dot" mode: the `.` is the decimal
+  separator, while the `,` is totally ignored in numbers.
+  In the output, the `.` is used as the decimal separator.
 
 ```shell
-$ clac -c "1.2 3,4 *"
+$ clac -b "1.2 3,4 *"
 4.08
 
-$ clac -cd "1.2 3,4 *"
+$ clac -c "1,2 3,4 *"
 4,08
-```
 
-To make clac ignore thousands separators in numbers, start it with
-the `-t` option. What the thousands separator is, depends on whether
-`-c` is present or not. The default thousands separator is the comma,
-with `-c` it becomes the dot. This means that when clac is started
-with both the `-c` and `-t` options (e.g., with `-ct`), the dot is
-not recognized as a decimal separator.
+$ clac -C "1.234.567,89"
+1234567,89
 
-```shell
-$ clac -t "123,456.99"
-123456.99
-
-$ clac -cd "123.000 4,567 +"
-127,567
-
-$ clac -cdt "123.000 4,567 +"
-123004,567
+$ clac -D "1,234,567.89"
+1234567.89
 ```
 
 The definition of words in the configuration file is always parsed
-_without_ the `-c` and `-t` options, i.e., numbers therein may only
-use the dot as the decimal separator and may not use any thousands
-separator. This way the configuration files doesn't change its
+in "dot" mode, i.e., numbers therein may only use the dot as the
+decimal separator and may not use any thousands separator.
+This way the configuration file doesn't change its
 meaning depending on the options clac is started with.
 
 

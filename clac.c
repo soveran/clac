@@ -77,9 +77,7 @@ static node *head = NULL;
 static node *tail = NULL;
 static sds result;
 static double hole = 0;
-static char decsep = '.';
-static char thousep = '\0';
-static int displaycomma = 0;
+static char mode = 'd';
 
 static int isoverflow(stack *s) {
 	if (isfull(s)) {
@@ -283,9 +281,11 @@ static char *number(double dbl) {
 
 	sprintf(buffer, NUMBER_FMT, dbl);
 
-	if (displaycomma) {
+	if (mode == 'c' || mode == 'C') {
 		for (c = buffer; *c; c++) {
-			if (*c == '.') *c = ',';
+			if (*c == '.') {
+				*c = ',';
+			}
 		}
 	}
 	return buffer;
@@ -442,11 +442,21 @@ static void process(sds word, int toplevel) {
 	} else if ((n = get(word)) != NULL) {
 		eval(n->meaning, 0);
 	} else {
-		if (toplevel && (decsep != '.' || thousep != '\0')) {
+		if (toplevel && mode != 'd') {
 			for (d = c = word; *c; c++) {
-				if (*c == decsep) {
-					*d++ = '.';
-				} else if (*c != thousep) {
+				if (*c == ',') {
+					if (mode == 'b' || mode == 'c' || mode == 'C') {
+						*d++ = '.';
+					} else if (mode != 'D') {
+						*d++ = ',';
+					}
+				} else if (*c == '.') {
+					if (mode == 'b' || mode == 'd' || mode == 'D') {
+						*d++ = '.';
+					} else if (mode != 'C') {
+						*d++ = ',';
+					}
+				} else {
 					*d++ = *c;
 				}
 			}
@@ -538,20 +548,10 @@ int main(int argc, char **argv) {
 	for (i = 1; i < argc; i++) {
 		if (strlen(argv[i]) > 1 && argv[i][0] == '-' && isalpha(argv[i][1])) {
 			for (j = 1; j < strlen(argv[i]); j++) {
-				switch (argv[i][j]) {
-					case 'c':
-						decsep = ',';
-						if (thousep) thousep = '.';
-						break;
-					case 'd':
-						displaycomma = 1;
-						break;
-					case 't':
-						thousep = (decsep == '.') ? ',' : '.';
-						break;
-					default:
-						goto usage_error;
+				if (strchr("bcCdD", argv[i][j]) == NULL) {
+					goto usage_error;
 				}
+				mode = argv[i][j];
 			}
 		} else if (expr == NULL) {
 			expr = argv[i];
@@ -601,6 +601,6 @@ int main(int argc, char **argv) {
 	return 0;
 
 usage_error:
-	fprintf(stderr, "usage: clac [-cdt] [expression]\n");
+	fprintf(stderr, "usage: clac [-bcCdD] [expression]\n");
 	exit(1);
 }
