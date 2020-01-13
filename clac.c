@@ -33,6 +33,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <locale.h>
 #include <math.h>
 #include "linenoise.h"
 #include "sds.h"
@@ -40,7 +41,8 @@
 /* UI */
 #define HINT_COLOR 33
 #define NUMBER_FMT "%.15g"
-#define OUTPUT_FMT "\x1b[33m= " NUMBER_FMT "\x1b[0m\n"
+#define NUMBER_FMT_MAX_STRLEN 22
+#define OUTPUT_FMT "\x1b[33m= %s\x1b[0m\n"
 #define WORDEF_FMT "%s \x1b[33m\"%s\"\x1b[0m\n"
 
 /* Config */
@@ -75,6 +77,7 @@ static node *head = NULL;
 static node *tail = NULL;
 static sds result;
 static double hole = 0;
+static char mode = 'd';
 
 static int isoverflow(stack *s) {
 	if (isfull(s)) {
@@ -272,11 +275,27 @@ static void load(sds filename) {
 	sdsfree(content);
 }
 
-static void eval(const char *input);
+static char *number(double dbl) {
+	static char buffer[NUMBER_FMT_MAX_STRLEN + 1];
+	char *c;
 
-static void process(sds word) {
+	sprintf(buffer, NUMBER_FMT, dbl);
+
+	if (mode == 'c' || mode == 'C') {
+		for (c = buffer; *c; c++) {
+			if (*c == '.') {
+				*c = ',';
+			}
+		}
+	}
+	return buffer;
+}
+
+static void eval(const char *input, int toplevel);
+
+static void process(sds word, int toplevel) {
 	double a, b;
-	char *z;
+	char *c, *d, *z;
 	node *n;
 
 	if (!strcmp(word, "_")) {
@@ -420,9 +439,29 @@ static void process(sds word) {
 		move(s0, s1, count(s0));
 	} else if (!strcasecmp(word, ";")) {
 		move(s1, s0, count(s1));
- 	} else if ((n = get(word)) != NULL) {
- 		eval(n->meaning);
+	} else if ((n = get(word)) != NULL) {
+		eval(n->meaning, 0);
 	} else {
+		if (toplevel && mode != 'd') {
+			for (d = c = word; *c; c++) {
+				if (*c == ',') {
+					if (mode == 'b' || mode == 'c' || mode == 'C') {
+						*d++ = '.';
+					} else if (mode != 'D') {
+						*d++ = ',';
+					}
+				} else if (*c == '.') {
+					if (mode == 'b' || mode == 'd' || mode == 'D') {
+						*d++ = '.';
+					} else if (mode != 'C') {
+						*d++ = ',';
+					}
+				} else {
+					*d++ = *c;
+				}
+			}
+			*d = '\0';
+		}
 		a = strtod(word, &z);
 
 		if (*z == '\0') {
@@ -433,13 +472,13 @@ static void process(sds word) {
 	}
 }
 
-static void eval(const char *input) {
+static void eval(const char *input, int toplevel) {
 	int i, argc;
 
 	sds *argv = sdssplitargs(input, &argc);
 
 	for (i = 0; i < argc; i++) {
-		process(argv[i]);
+		process(argv[i], toplevel);
 	}
 
 	sdsfreesplitres(argv, argc);
@@ -453,20 +492,20 @@ static char *hints(const char *input, int *color, int *bold) {
 	clear(s0);
 	clear(s1);
 
-	eval(input);
+	eval(input, 1);
 	sdsclear(result);
 
 	result = sdscat(result, " ");
 
 	for (i = 0; i < count(s0); i++) {
-		result = sdscatprintf(result, " " NUMBER_FMT, s0->items[i]);
+		result = sdscatprintf(result, " %s", number(s0->items[i]));
 	}
 
 	if (!isempty(s1)) {
 		result = sdscat(result, " ⋮");
 
 		for (i = s1->top-1; i > -1; i--) {
-			result = sdscatprintf(result, " " NUMBER_FMT, s1->items[i]);
+			result = sdscatprintf(result, " %s", number(s1->items[i]));
 		}
 	}
 
@@ -497,25 +536,38 @@ static void config() {
 }
 
 int main(int argc, char **argv) {
-	char *line;
+	char *line, *expr = NULL;
+	int i, j;
+
+	setlocale(LC_NUMERIC, "C");
 
 	result = sdsempty();
 
 	config();
 
-	if (argc == 2) {
-		eval(argv[1]);
+	for (i = 1; i < argc; i++) {
+		if (strlen(argv[i]) > 1 && argv[i][0] == '-' && isalpha(argv[i][1])) {
+			for (j = 1; j < strlen(argv[i]); j++) {
+				if (strchr("bcCdD", argv[i][j]) == NULL) {
+					goto usage_error;
+				}
+				mode = argv[i][j];
+			}
+		} else if (expr == NULL) {
+			expr = argv[i];
+		} else {
+			goto usage_error;
+		}
+	}
+
+	if (expr != NULL) {
+		eval(expr, 1);
 
 		while (count(s0) > 0) {
-			printf(NUMBER_FMT "\n", pop(s0));
+			printf("%s\n", number(pop(s0)));
 		}
 
 		exit(0);
-	}
-
-	if (argc > 2) {
-		fprintf(stderr, "usage: clac [expression]\n");
-		exit(1);
 	}
 
 	linenoiseSetHintsCallback(hints);
@@ -535,7 +587,7 @@ int main(int argc, char **argv) {
 		} else if (!isempty(s0)) {
 			hole = peek(s0);
 			clear(s0);
-			printf(OUTPUT_FMT, hole);
+			printf(OUTPUT_FMT, number(hole));
 		}
 
 		sdsclear(result);
@@ -547,4 +599,8 @@ int main(int argc, char **argv) {
 	cleanup();
 
 	return 0;
+
+usage_error:
+	fprintf(stderr, "usage: clac [-bcCdD] [expression]\n");
+	exit(1);
 }

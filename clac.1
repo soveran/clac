@@ -9,6 +9,7 @@
 .Sh SYNOPSIS
 .
 .Nm
+.Op Fl bcCdD
 .Op Ar expression
 .
 .Sh DESCRIPTION
@@ -299,6 +300,39 @@ define the word
 .Sy avg
 as
 .Qq Sy "count . sum , /" .
+.
+.Sh OPTIONS
+.Bl -tag -width 6n
+.It Fl b
+"both" mode: both the `.` and the `,` are accepted as decimal separators.
+No thousands separator can be used.
+In the output, the `.` is used as the decimal separator.
+.
+.It Fl c
+"comma" mode: only the `,` is accepted as the decimal separator.
+No thousands separator can be used.
+In the output, the `,` is used as the decimal separator.
+.
+.It Fl C
+"super comma" mode: the `,` is the decimal separator,
+while the `.` is completely ignored in numbers.
+In the output, the `,` is used as the decimal separator.
+.
+.It Fl d
+"dot" mode (default): only the `.` is accepted as the decimal separator.
+No thousands separator can be used.
+In the output, the `.` is used as the decimal separator.
+.
+.It Fl D
+"super dot" mode: the `.` is the decimal separator,
+while the `,` is completely ignored in numbers.
+In the output, the `.` is used as the decimal separator.
+.
+.El
+.Pp
+The default separator mode is
+.Fl d .
+If more than one mode is provided, the last one wins.
 .
 .Sh AUTHOR
 .An Michel Martens Aq mail@soveran.com

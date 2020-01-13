@@ -305,6 +305,62 @@ $ clac "1 2 3 4 count . sum , /"
 In fact, if you find yourself calculating averages very often, you
 can define the word `avg` as `"count . sum , /"`.
 
+### Separator modes
+
+In many countries the comma is the decimal separator.
+Furthermore a thousands separator is often used (in India it's a bit
+more complicated, but let's still call it like that).
+The following could be prices in three different countries:
+
+* `1,234,567.89 $`
+* `1.234.567,89 €`
+* `12.34.56.789 ₹`
+
+Clac has a total of 5 separator modes, that can be selected by
+starting it with one of the following options (if more are provided,
+the last one wins; if none is provided, `-d` is implied):
+
+* `-b`: "both" mode: both the `.` and the `,` are accepted as
+  decimal separators. No thousands separator can be used.
+  In the output, the `.` is used as the decimal separator.
+
+* `-c`: "comma" mode: only the `,` is accepted as the decimal
+  separator. No thousands separator can be used.
+  In the output, the `,` is used as the decimal separator.
+
+* `-C`: "super comma" mode: the `,` is the decimal
+  separator, while the `.` is completely ignored in numbers.
+  In the output, the `,` is used as the decimal separator.
+
+* `-d`: "dot" mode (default): only the `.` is accepted as the
+  decimal separator. No thousands separator can be used.
+  In the output, the `.` is used as the decimal separator.
+
+* `-D`: "super dot" mode: the `.` is the decimal
+  separator, while the `,` is completely ignored in numbers.
+  In the output, the `.` is used as the decimal separator.
+
+```shell
+$ clac -b "1.2 3,4 *"
+4.08
+
+$ clac -c "1,2 3,4 *"
+4,08
+
+$ clac -C "1.234.567,89"
+1234567,89
+
+$ clac -D "1,234,567.89"
+1234567.89
+```
+
+The definition of words in the configuration file is always parsed
+in "dot" mode, i.e., numbers therein may only use the dot as the
+decimal separator and may not use any thousands separator.
+This way the configuration file doesn't change its
+meaning depending on the options clac is started with.
+
+
 Contributing
 ------------
 

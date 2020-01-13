@@ -33,8 +33,35 @@ assert_equal "nan" `./clac 3+`
 # Not found words starting with alpha are ignored
 assert_equal "" `./clac foo`
 
-# Argument error (too many arguments)
-assert_equal "" `./clac 1 2 2> /dev/null`
+# Usage errors
+assert_equal "usage:" `./clac 1 2 2>&1` # too many arguments
+assert_equal "usage:" `./clac -o 2>&1` # unknown argument
+assert_equal "usage:" `./clac -co 2>&1` # known and unknown argument
+
+# Separator modes
+assert_equal "1234.99" `./clac -b "1234.99"`
+assert_equal "1234.99" `./clac -b "1234,99"`
+assert_equal "nan"     `./clac -c "1234.99"`
+assert_equal "1234,99" `./clac -c "1234,99"`
+assert_equal "1234.99" `./clac -d "1234.99"`
+assert_equal "nan"     `./clac -d "1234,99"`
+assert_equal "123499"  `./clac -C "1234.99"`
+assert_equal "1234,99" `./clac -C "1234,99"`
+assert_equal "1234.99" `./clac -D "1234.99"`
+assert_equal "123499"  `./clac -D "1234,99"`
+assert_equal "nan"     `./clac -b "1,234.99"`
+assert_equal "nan"     `./clac -b "1.234,99"`
+assert_equal "nan"     `./clac -c "1,234.99"`
+assert_equal "nan"     `./clac -c "1.234,99"`
+assert_equal "nan"     `./clac -d "1,234.99"`
+assert_equal "nan"     `./clac -d "1.234,99"`
+assert_equal "1,23499" `./clac -C "1,234.99"`
+assert_equal "1234,99" `./clac -C "1.234,99"`
+assert_equal "1234.99" `./clac -D "1,234.99"`
+assert_equal "1.23499" `./clac -D "1.234,99"`
+assert_equal "3001000.08"  `./clac -b "1000,2 3000.4 *"`
+assert_equal "0,003141592" `./clac -c "pi 0,001 *"`
+assert_equal "3141,592"    `./clac -C "pi 1.000,000 *"`
 
 # Stashing numbers
 assert_equal "21" `./clac "4 3 9 . * , +"`
