@@ -320,8 +320,8 @@ Clac has a total of 5 separator modes, that can be selected by
 starting it with one of the following options (if more are provided,
 the last one wins; if none is provided, `-d` is implied):
 
-* `-b`: "both" mode: both the `.` and the `,` are accepted as the
-  decimal separator. No thousands separator can be used.
+* `-b`: "both" mode: both the `.` and the `,` are accepted as
+  decimal separators. No thousands separator can be used.
   In the output, the `.` is used as the decimal separator.
 
 * `-c`: "comma" mode: only the `,` is accepted as the decimal
@@ -329,7 +329,7 @@ the last one wins; if none is provided, `-d` is implied):
   In the output, the `,` is used as the decimal separator.
 
 * `-C`: "super comma" mode: the `,` is the decimal
-  separator, while the `.` is totally ignored in numbers.
+  separator, while the `.` is completely ignored in numbers.
   In the output, the `,` is used as the decimal separator.
 
 * `-d`: "dot" mode (default): only the `.` is accepted as the
@@ -337,7 +337,7 @@ the last one wins; if none is provided, `-d` is implied):
   In the output, the `.` is used as the decimal separator.
 
 * `-D`: "super dot" mode: the `.` is the decimal
-  separator, while the `,` is totally ignored in numbers.
+  separator, while the `,` is completely ignored in numbers.
   In the output, the `.` is used as the decimal separator.
 
 ```shell
