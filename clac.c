@@ -34,6 +34,8 @@
 #include <ctype.h>
 #include <errno.h>
 #include <math.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include "linenoise.h"
 #include "sds.h"
 
@@ -45,6 +47,8 @@
 
 /* Config */
 #define BUFFER_MAX 1024
+#define HIST_DIR   "clac"
+#define HIST_FILE  "clac/history"
 #define WORDS_FILE "clac/words"
 #define CAPACITY   0xFF
 
@@ -475,8 +479,8 @@ static char *hints(const char *input, int *color, int *bold) {
 	return result;
 }
 
-static sds buildpath(const char *fmt, const char *dir) {
-	return sdscatfmt(sdsempty(), fmt, dir, WORDS_FILE);
+static sds buildpath(const char *fmt, const char *dir, const char *file) {
+	return sdscatfmt(sdsempty(), fmt, dir, file);
 }
 
 static void config() {
@@ -485,15 +489,35 @@ static void config() {
 	if (getenv("CLAC_WORDS") != NULL) {
 		filename = sdsnew(getenv("CLAC_WORDS"));
 	} else if (getenv("XDG_CONFIG_HOME") != NULL) {
-		filename = buildpath("%s/%s", getenv("XDG_CONFIG_HOME"));
+		filename = buildpath("%s/%s", getenv("XDG_CONFIG_HOME"), WORDS_FILE);
 	} else if (getenv("HOME") != NULL) {
-		filename = buildpath("%s/.config/%s", getenv("HOME"));
+		filename = buildpath("%s/.config/%s", getenv("HOME"), WORDS_FILE);
 	}
 
 	if (filename) {
 		load(filename);
 		sdsfree(filename);
 	}
+}
+
+static sds history_config() {
+	sds directory = NULL;
+	sds filename = NULL;
+
+	if (getenv("XDG_DATA_HOME") != NULL) {
+		directory = buildpath("%s/%s", getenv("XDG_DATA_HOME"), HIST_DIR);
+		filename = buildpath("%s/%s", getenv("XDG_DATA_HOME"), HIST_FILE);
+	} else if (getenv("HOME") != NULL) {
+		directory = buildpath("%s/.local/share/%s", getenv("HOME"), HIST_DIR);
+		filename = buildpath("%s/.local/share/%s", getenv("HOME"), HIST_FILE);
+	} else {
+		return NULL;
+	}
+
+	mkdir(directory, 0700);
+	sdsfree(directory);
+
+	return filename;
 }
 
 int main(int argc, char **argv) {
@@ -518,8 +542,14 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+	sds history = history_config();
+
 	linenoiseSetHintsCallback(hints);
 	linenoiseSetCompletionCallback(completion);
+
+	if (history) {
+		linenoiseHistoryLoad(history);
+	}
 
 	while((line = linenoise("> ")) != NULL) {
 		if (!strcmp(line, "words")) {
@@ -541,9 +571,14 @@ int main(int argc, char **argv) {
 		sdsclear(result);
 		linenoiseHistoryAdd(line);
 		free(line);
+
+		if (history) {
+			linenoiseHistorySave(history);
+		}
 	}
 
 	sdsfree(result);
+	sdsfree(history);
 	cleanup();
 
 	return 0;
