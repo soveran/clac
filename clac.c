@@ -424,8 +424,8 @@ static void process(sds word) {
 		move(s0, s1, count(s0));
 	} else if (!strcasecmp(word, ";")) {
 		move(s1, s0, count(s1));
- 	} else if ((n = get(word)) != NULL) {
- 		eval(n->meaning);
+	} else if ((n = get(word)) != NULL) {
+		eval(n->meaning);
 	} else {
 		a = strtod(word, &z);
 
