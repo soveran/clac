@@ -383,7 +383,11 @@ static void process(sds word) {
 		if (count(s0) > 0) {
 			a = pop(s0);
 
-			push(s0, a * tgamma(a));
+			if (a == 0) {
+				push(s0, 1);
+			} else {
+				push(s0, a * tgamma(a));
+			}
 		}
 	} else if (!strcasecmp(word, "dup")) {
 		if (!isempty(s0)) {
