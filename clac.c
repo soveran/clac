@@ -260,6 +260,10 @@ static void load(sds filename) {
 	for (i = 0; i < linecount; i++) {
 		lines[i] = sdstrim(lines[i], " \t\r\n");
 
+		if (lines[i][0] == '#') {
+		  continue;
+		}
+
 		if (parse(lines[i]) != 0) {
 			sdsfreesplitres(lines, linecount);
 

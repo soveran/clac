@@ -223,10 +223,11 @@ If set, clac will search for `$HOME/.config/clac/words`.
 ### How to define words
 
 Words are defined as aliases, with one alias on each line. Empty
-lines are ignored. Here are some examples:
+lines and lines starting with `#` are ignored. Here are some examples:
 
 ```shell
 pi 3.14159265358979323846
+# this is a comment
 tau "pi 2 *"
 sqrt "0.5 ^"
 ```
