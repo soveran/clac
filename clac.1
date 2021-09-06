@@ -251,6 +251,26 @@ User defined words can be used as if they were built-in commands:
 .Dl $ clac Qq "42 dup * pi *"
 .Dl Sy 5541.76944093239
 .
+.Ss Comments
+.
+Any lines that begin with
+.Sy #
+are considered comments and are ignored. There are no inline comments,
+and any
+.Sy #
+characters that are not the first character of a line are interpreted
+literally. To define
+.Sy #
+as a word, wrap it in double quotes in the definition:
+.Pp
+.Dl # This is a comment.
+.Dl \(dq#\(dq count
+.Pp
+The first line is ignored, and the second line assigns
+.Sy #
+to the operation
+.Sy count.
+.
 .Ss How to list defined words
 .
 If you type `words` and hit enter, clac will list the defined words.

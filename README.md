@@ -222,8 +222,8 @@ If set, clac will search for `$HOME/.config/clac/words`.
 
 ### How to define words
 
-Words are defined as aliases, with one alias on each line. Empty
-lines and lines starting with `#` are ignored. Here are some examples:
+Words are defined as aliases, with one alias on each line.
+Empty lines are ignored. Here are some examples:
 
 ```shell
 pi 3.14159265358979323846
@@ -250,6 +250,22 @@ User defined words can be used as if they were built-in commands:
 $ clac "42 dup * pi *"
 5541.76944093239
 ```
+
+### Comments
+
+Any lines that begin with `#` are considered comments and
+are ignored. There are no inline comments, and any `#`
+characters that are not the first character of a line are
+interpreted literally. To define `#` as a word, wrap it in
+double quotes in the definition:
+
+```shell
+# This is a comment.
+"#" count
+```
+
+The first line is ignored, and the second line assigns `#`
+to the operation `count`.
 
 ### How to list defined words
 
