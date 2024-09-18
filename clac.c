@@ -155,6 +155,17 @@ static double add(stack *s, int n) {
 	return a;
 }
 
+static double mul(stack *s, int n) {
+	double a = pop(s);
+
+	while (!isempty(s) && n > 1) {
+		a *= pop(s);
+		n--;
+	}
+
+	return a;
+}
+
 static node *get(sds word) {
 	node *curr = head;
 
@@ -321,10 +332,32 @@ static void process(sds word) {
 			b = pop(s0);
 			push(s0, pow(b, a));
 		}
+	} else if (!strcmp(word, "or")) {
+		if (count(s0) > 1) {
+			a = pop(s0);
+			b = pop(s0);
+			push(s0, (int)fabs(b)|(int)fabs(a));
+		}
+	} else if (!strcmp(word, "and")) {
+		if (count(s0) > 1) {
+			a = pop(s0);
+			b = pop(s0);
+			push(s0, (int)fabs(b)&(int)fabs(a));
+		}
+	} else if (!strcmp(word, "xor")) {
+		if (count(s0) > 1) {
+			a = pop(s0);
+			b = pop(s0);
+			push(s0, (int)fabs(b)^(int)fabs(a));
+		}
 	} else if (!strcasecmp(word, "sum")) {
 		push(s0, add(s0, count(s0)));
 	} else if (!strcasecmp(word, "add")) {
 		push(s0, add(s0, pop(s0)));
+	} else if (!strcasecmp(word, "prod")) {
+		push(s0, mul(s0, count(s0)));
+	} else if (!strcasecmp(word, "mul")) {
+		push(s0, mul(s0, pop(s0)));
 	} else if (!strcasecmp(word, "abs")) {
 		if (count(s0) > 0) {
 			push(s0, fabs(pop(s0)));

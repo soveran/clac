@@ -135,6 +135,15 @@ Pop all the values in the stack and push their sum.
 Pop the value `a` and remove that many items from the stack. Push
 their sum.
 
+### Product
+
+`prod`
+Pop all the values in the stack and push their product.
+
+`mul`
+Pop the value `a` and remove that many items from the stack. Push
+their product.
+
 ### Rounding
 
 `ceil`
@@ -152,6 +161,17 @@ Pop the value `a` and push the integer value closest to `a`.
 
 `abs`
 Pop the value `a` and push the non-negative value of `a`.
+
+### Binary operations
+
+`and`
+Pop two values `a` and `b` and push the binary AND of `a` and `b`.
+
+`or`
+Pop two values `a` and `b` and push the binary OR of `a` and `b`.
+
+`xor`
+Pop two values `a` and `b` and push the binary XOR of `a` and `b`.
 
 ### Stack manipulation
 

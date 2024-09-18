@@ -133,6 +133,16 @@ Pop the value `a` and remove that many items from the stack. Push
 their sum.
 .El
 .
+.Ss Product
+.
+.Bl -tag -width Fl
+.It Ic prod
+Pop all the values in the stack and push their product.
+.It Ic mul
+Pop the value `a` and remove that many items from the stack. Push
+their product.
+.El
+.
 .Ss Rounding
 .
 .Bl -tag -width Fl
@@ -151,6 +161,17 @@ Pop the value `a` and push the integer value closest to `a`.
 .Bl -tag -width Fl
 .It Ic abs
 Pop the value `a` and push the non-negative value of `a`.
+.El
+.
+.Ss Binary operations
+.
+.Bl -tag -width Fl
+.It Ic and
+Pop two values `a` and `b` and push the binary AND of `a` and `b`.
+.It Ic or
+Pop two values `a` and `b` and push the binary OR of `a` and `b`.
+.It Ic xor
+Pop two values `a` and `b` and push the binary XOR of `a` and `b`.
 .El
 .
 .Ss Stack manipulation
