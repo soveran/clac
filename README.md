@@ -84,6 +84,9 @@ division of `b` by `a`.
 `^`
 Pop two values `a` and `b` and push the result of `b ^ a`.
 
+`exp`
+Pop the value `a` and push the result of `e ^ a`.
+
 ### Logarithm
 
 `ln`
