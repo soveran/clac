@@ -963,8 +963,10 @@ char *linenoiseEditFeed(struct linenoiseState *l) {
         }
         return strdup(l->buf);
     case CTRL_C:
+        errno = EAGAIN;
+        return NULL;
     case CTRL_G:
-    	break;
+        break;
     case BACKSPACE:   /* backspace */
     case 8:     /* ctrl-h */
         linenoiseEditBackspace(l);
